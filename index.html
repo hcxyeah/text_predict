@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text prediction in R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Text prediction in R">
+  <meta name="author" content="Catherine">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Text prediction in R</h1>
+    <h2></h2>
+    <p>Catherine<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Overview</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This project builds a text predict model to predict the word users are going to type when they input a few words. Studying from text data scraped from blog, news and twitter, this project using n-gram method builts a language model and using kneser-Ney smoothing method to predict unseen text. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Project Steps</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Getting and cleaning data: number, punctuations and url are removed from the data, short representation like I&#39;m is replaced with i am. </li>
+<li>Creating dtm: using text2vec package create uni-gram, bi-gram, tri-gram and quad-gram models.</li>
+<li>Creating frequency table: convert the dtm matrix into frequency tables. </li>
+<li>Building smoothing algorithm: using kneser-Ney method to build the predict function.</li>
+<li>Creating shiny app.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Data</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">summary &lt;- data.frame(filename = c(&quot;blog&quot;, &quot;news&quot;, &quot;twitter&quot;),
+                      file_size_mb = c(size_blog, size_news, size_twitter),
+                      num_lines = c(length(blog), length(news), length(tweet)),
+                      max_num_char = c(which.max(nchar(blog)), which.max(nchar(news)),
+                                        which.max(nchar(tweet))))
+
+summary
+</code></pre>
+
+<pre><code>##   filename file_size_mb num_lines max_num_char
+## 1     blog     200.4242    899288       483415
+## 2     news     196.2775   1010242       123628
+## 3  twitter     159.3641   2360148           26
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>N-gram Model</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>This predict model uses n-gram model and Kneser-Ney smoothing method. </li>
+<li>If input text has more than 3 words, it will use 4 gram models and return words have higher score. If input text is not in the 4 gram frequency table, it will go to search in tri-gram frequency table, and then bi-gram etc. </li>
+<li>Because the data is too big for shiny app, I used only 70% of the data, and trimed those sparse terms. </li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Usage</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Type in your text into the widgets and then click go button, predicted word will show up in the main panel on the right. The words are showed in order, the first one is the most confident prediction. </p>
+
+<p>Thank you!</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Overview'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Project Steps'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Data'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='N-gram Model'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Usage'>
+         5
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

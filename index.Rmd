@@ -1,0 +1,61 @@
+---
+title       : Text prediction in R
+subtitle    : 
+author      : Catherine
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Overview
+
+This project builds a text predict model to predict the word users are going to type when they input a few words. Studying from text data scraped from blog, news and twitter, this project using n-gram method builts a language model and using kneser-Ney smoothing method to predict unseen text. 
+
+--- .class #id 
+
+## Project Steps
+
+1. Getting and cleaning data: number, punctuations and url are removed from the data, short representation like I'm is replaced with i am. 
+2. Creating dtm: using text2vec package create uni-gram, bi-gram, tri-gram and quad-gram models.
+3. Creating frequency table: convert the dtm matrix into frequency tables. 
+4. Building smoothing algorithm: using kneser-Ney method to build the predict function.
+5. Creating shiny app.
+
+---
+
+## Data 
+
+```{r}
+summary <- data.frame(filename = c("blog", "news", "twitter"),
+                      file_size_mb = c(size_blog, size_news, size_twitter),
+                      num_lines = c(length(blog), length(news), length(tweet)),
+                      max_num_char = c(which.max(nchar(blog)), which.max(nchar(news)),
+                                        which.max(nchar(tweet))))
+
+summary
+```
+
+--- 
+
+## N-gram Model
+
+1. This predict model uses n-gram model and Kneser-Ney smoothing method. 
+2. If input text has more than 3 words, it will use 4 gram models and return words have higher score. If input text is not in the 4 gram frequency table, it will go to search in tri-gram frequency table, and then bi-gram etc. 
+3. Because the data is too big for shiny app, I used only 70% of the data, and trimed those sparse terms. 
+
+---
+
+## Usage
+
+Type in your text into the widgets and then click go button, predicted word will show up in the main panel on the right. The words are showed in order, the first one is the most confident prediction. 
+
+Thank you!
+
+
+
+
+
